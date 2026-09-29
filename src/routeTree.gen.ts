@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AvisoLegalRouteImport } from './routes/aviso-legal'
+import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CursosRouteImport } from './routes/cursos'
 import { Route as EquipoRouteImport } from './routes/equipo'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const AvisoLegalRoute = AvisoLegalRouteImport.update({
   id: '/aviso-legal',
   path: '/aviso-legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CursosRoute = CursosRouteImport.update({
@@ -50,6 +56,7 @@ const TerminosRoute = TerminosRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/aviso-legal': typeof AvisoLegalRoute
+  '/contacto': typeof ContactoRoute
   '/cursos': typeof CursosRoute
   '/equipo': typeof EquipoRoute
   '/privacidad': typeof PrivacidadRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aviso-legal': typeof AvisoLegalRoute
+  '/contacto': typeof ContactoRoute
   '/cursos': typeof CursosRoute
   '/equipo': typeof EquipoRoute
   '/privacidad': typeof PrivacidadRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/aviso-legal': typeof AvisoLegalRoute
+  '/contacto': typeof ContactoRoute
   '/cursos': typeof CursosRoute
   '/equipo': typeof EquipoRoute
   '/privacidad': typeof PrivacidadRoute
@@ -75,13 +84,27 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/aviso-legal' | '/cursos' | '/equipo' | '/privacidad' | '/terminos'
+    | '/'
+    | '/aviso-legal'
+    | '/contacto'
+    | '/cursos'
+    | '/equipo'
+    | '/privacidad'
+    | '/terminos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/aviso-legal' | '/cursos' | '/equipo' | '/privacidad' | '/terminos'
+  to:
+    | '/'
+    | '/aviso-legal'
+    | '/contacto'
+    | '/cursos'
+    | '/equipo'
+    | '/privacidad'
+    | '/terminos'
   id:
     | '__root__'
     | '/'
     | '/aviso-legal'
+    | '/contacto'
     | '/cursos'
     | '/equipo'
     | '/privacidad'
@@ -91,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AvisoLegalRoute: typeof AvisoLegalRoute
+  ContactoRoute: typeof ContactoRoute
   CursosRoute: typeof CursosRoute
   EquipoRoute: typeof EquipoRoute
   PrivacidadRoute: typeof PrivacidadRoute
@@ -111,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/aviso-legal'
       fullPath: '/aviso-legal'
       preLoaderRoute: typeof AvisoLegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cursos': {
@@ -147,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AvisoLegalRoute: AvisoLegalRoute,
+  ContactoRoute: ContactoRoute,
   CursosRoute: CursosRoute,
   EquipoRoute: EquipoRoute,
   PrivacidadRoute: PrivacidadRoute,
