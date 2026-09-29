@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { courses, modalidades, type Modalidad } from "@/data/courses";
 import { seo } from "@/lib/seo";
 
-type Search = { curso: string | undefined };
+type Search = { curso?: string | undefined };
 
 export const Route = createFileRoute("/cursos")({
   validateSearch: (search: Record<string, unknown>): Search => ({
