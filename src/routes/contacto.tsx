@@ -17,11 +17,11 @@ import {
 } from "@/lib/storage";
 import { seo } from "@/lib/seo";
 
-type Search = { curso?: string };
+type Search = { curso: string | undefined };
 
 export const Route = createFileRoute("/contacto")({
   validateSearch: (search: Record<string, unknown>): Search => ({
-    curso: typeof search.curso === "string" ? search.curso : undefined,
+    curso: typeof search["curso"] === "string" ? search["curso"] : undefined,
   }),
   head: () =>
     seo({
