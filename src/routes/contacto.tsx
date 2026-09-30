@@ -125,6 +125,8 @@ function Contacto() {
   const refAcepta = useRef<HTMLInputElement>(null);
   const refTelLlamada = useRef<HTMLInputElement>(null);
   const refAceptaLlamada = useRef<HTMLInputElement>(null);
+  const refConfirmacion = useRef<HTMLParagraphElement>(null);
+  const refConfirmacionLlamada = useRef<HTMLParagraphElement>(null);
   const ultimoEnvio = useRef(0);
   const ultimaLlamada = useRef(0);
 
@@ -157,6 +159,17 @@ function Contacto() {
     const encontrado = getCourse(curso);
     if (encontrado) setCursoId(encontrado.id);
   }, [curso]);
+
+  // La confirmación aparece junto al botón; si quedó fuera de pantalla, se acerca a la vista.
+  useEffect(() => {
+    if (confirmacion) refConfirmacion.current?.scrollIntoView({ block: "nearest" });
+  }, [confirmacion]);
+
+  useEffect(() => {
+    if (confirmacionLlamada) {
+      refConfirmacionLlamada.current?.scrollIntoView({ block: "nearest" });
+    }
+  }, [confirmacionLlamada]);
 
   const validar = (): Errores => {
     const nuevos: Errores = {};
@@ -293,14 +306,6 @@ function Contacto() {
           <h2 id="formulario" className="text-xl font-bold">
             Formulario de consulta
           </h2>
-
-          <div aria-live="polite" className="min-h-0">
-            {confirmacion ? (
-              <p className="mt-4 rounded-sm border-l-4 border-l-accent bg-card px-4 py-3 text-sm font-semibold text-primary">
-                {confirmacion}
-              </p>
-            ) : null}
-          </div>
 
           <form onSubmit={onSubmit} noValidate className="mt-6 space-y-5">
             <div>
@@ -493,6 +498,17 @@ function Contacto() {
               Enviar consulta
             </button>
           </form>
+
+          <div aria-live="polite" className="mt-4 empty:mt-0">
+            {confirmacion ? (
+              <p
+                ref={refConfirmacion}
+                className="rounded-sm border-l-4 border-l-accent bg-card px-4 py-3 text-sm font-semibold text-primary"
+              >
+                {confirmacion}
+              </p>
+            ) : null}
+          </div>
         </section>
 
         <div className="space-y-10">
@@ -504,14 +520,6 @@ function Contacto() {
               Dejá tu teléfono y te llamamos dentro del horario de atención. Es una
               simulación: no se realiza ninguna llamada.
             </p>
-
-            <div aria-live="polite" className="min-h-0">
-              {confirmacionLlamada ? (
-                <p className="mt-4 rounded-sm border-l-4 border-l-accent bg-surface px-4 py-3 text-sm font-semibold text-primary">
-                  {confirmacionLlamada}
-                </p>
-              ) : null}
-            </div>
 
             <form onSubmit={onLlamada} noValidate className="mt-4 space-y-4">
               <div>
@@ -569,6 +577,17 @@ function Contacto() {
                 Quiero que me llamen
               </button>
             </form>
+
+            <div aria-live="polite" className="mt-4 empty:mt-0">
+              {confirmacionLlamada ? (
+                <p
+                  ref={refConfirmacionLlamada}
+                  className="rounded-sm border-l-4 border-l-accent bg-surface px-4 py-3 text-sm font-semibold text-primary"
+                >
+                  {confirmacionLlamada}
+                </p>
+              ) : null}
+            </div>
           </section>
 
           <section aria-labelledby="datos" className="card-flat p-6">
