@@ -104,8 +104,8 @@ y borrar con el botón “Borrar decisión” del propio banner.
   pestaña para no perder lo escrito. Las tres páginas legales tienen un botón “Volver”
   (vuelve a la página anterior del sitio; si se abrieron directamente, lleva a Contacto).
 - **Ubicación**: el bloque de “Cómo llegar” usa un mapa estático de Ciudad Vieja y Centro
-  (OpenStreetMap, con atribución). La dirección es ficticia sobre una calle real
-  (Ituzaingó) y el marcador es ilustrativo, no marca un edificio concreto.
+  (OpenStreetMap, con atribución). La dirección es de ejemplo, sobre una calle real
+  (Ituzaingó 1488) y el marcador es ilustrativo, no identifica un edificio concreto.
 - **Retratos docentes**: se muestran en formato cuadrado y anclados arriba, porque en
   formato apaisado se cortaba la cabeza de algunas fotos.
 - **Contenido sobre concursos**: se contrastó con fuentes oficiales. El reparto de puntos

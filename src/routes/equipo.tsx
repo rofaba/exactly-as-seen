@@ -45,7 +45,7 @@ function Equipo() {
       <section className="container-page py-12 md:py-16">
         <p className="eyebrow">Institucional</p>
         <h1 className="mt-3 max-w-2xl text-3xl font-extrabold md:text-4xl">
-          Una academia chica, con docentes que corrigen
+          Una academia de calidad, con docentes que corrigen
         </h1>
         <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] md:items-start">
           <div className="space-y-4 text-muted-foreground">

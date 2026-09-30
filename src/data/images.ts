@@ -56,7 +56,7 @@ export const images = {
   },
   mapaCentro: {
     url: mapaCentro,
-    alt: "Mapa de Ciudad Vieja y Centro de Montevideo con un marcador en Ituzaingó, junto a la Plaza Matriz",
+    alt: "Mapa de Ciudad Vieja y Centro de Montevideo con un marcador sobre la calle Ituzaingó, entre 25 de Mayo y Cerrito",
     width: 720,
     height: 480,
   },
