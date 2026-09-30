@@ -129,6 +129,9 @@ y borrar con el botón “Borrar decisión” del propio banner.
 - **Convocatorias destacadas**: los accesos directos de Inicio son por tipo de llamado y
   no reproducen convocatorias reales con fechas, para no dar información que pueda
   quedar desactualizada.
+- **Formato del teléfono**: en los dos formularios se acepta un `+` opcional al inicio
+  (código de país) y el resto solo dígitos, sin espacios, puntos ni guiones, entre 8 y 12
+  dígitos. El campo muestra un ejemplo (`099555123 o +59899555123`) y una línea de ayuda.
 - **Retratos docentes**: se muestran en formato cuadrado y anclados arriba, porque en
   formato apaisado se cortaba la cabeza de algunas fotos.
 - **Contenido sobre concursos**: se contrastó con fuentes oficiales. El reparto de puntos

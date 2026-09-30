@@ -44,14 +44,15 @@ const emailValido = (valor: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valo
 
 type ErroresLlamada = Partial<Record<"telefono" | "acepta", string>>;
 
-const MENSAJE_TELEFONO =
-  "Revisá el teléfono: usá solo números y espacios (se aceptan + y paréntesis), entre 8 y 12 dígitos.";
+const PLACEHOLDER_TELEFONO = "099555123 o +59899555123";
 
-const telefonoValido = (valor: string) => {
-  if (!/^[+()\d\s]+$/.test(valor.trim())) return false;
-  const digitos = valor.replace(/\D/g, "");
-  return digitos.length >= 8 && digitos.length <= 12;
-};
+const AYUDA_TELEFONO =
+  "Solo números, sin espacios ni signos. Con código de país, empezá con + (ej.: +59899555123).";
+
+const MENSAJE_TELEFONO =
+  "Revisá el teléfono: solo números, con un + al inicio si incluís el código de país (entre 8 y 12 dígitos).";
+
+const telefonoValido = (valor: string) => /^\+?\d{8,12}$/.test(valor.trim());
 
 const ETAPAS = [
   "Todavía no elegí un llamado",
@@ -340,12 +341,20 @@ function Contacto() {
                 id="telefono"
                 ref={refTelefono}
                 type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                placeholder={PLACEHOLDER_TELEFONO}
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
                 aria-invalid={Boolean(errores.telefono)}
-                aria-describedby={errores.telefono ? "error-telefono" : undefined}
+                aria-describedby={
+                  errores.telefono ? "ayuda-telefono error-telefono" : "ayuda-telefono"
+                }
                 className={campoClases}
               />
+              <p id="ayuda-telefono" className="mt-1 text-xs text-muted-foreground">
+                {AYUDA_TELEFONO}
+              </p>
               {errores.telefono ? (
                 <p id="error-telefono" className="mt-1 text-sm text-destructive">
                   {errores.telefono}
@@ -492,12 +501,18 @@ function Contacto() {
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel"
+                  placeholder={PLACEHOLDER_TELEFONO}
                   value={telLlamada}
                   onChange={(e) => setTelLlamada(e.target.value)}
                   aria-invalid={Boolean(erroresLlamada.telefono)}
-                  aria-describedby={erroresLlamada.telefono ? "error-tel-llamada" : undefined}
+                  aria-describedby={
+                    erroresLlamada.telefono ? "ayuda-tel-llamada error-tel-llamada" : "ayuda-tel-llamada"
+                  }
                   className={campoClases}
                 />
+                <p id="ayuda-tel-llamada" className="mt-1 text-xs text-muted-foreground">
+                  {AYUDA_TELEFONO}
+                </p>
                 {erroresLlamada.telefono ? (
                   <p id="error-tel-llamada" className="mt-1 text-sm text-destructive">
                     {erroresLlamada.telefono}
