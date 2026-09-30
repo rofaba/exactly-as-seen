@@ -39,15 +39,19 @@ bun run lint     # ESLint
 | `src/data/testimonials.ts` | Los 3 testimonios ficticios |
 | `src/data/sampleConsultas.ts` | Las 3 consultas de ejemplo precargadas |
 | `src/data/contacto.ts` | Datos de contacto y referencias de cómo llegar |
-| `src/data/images.ts` | **Única** fuente de URLs de imágenes (clave → url, alt, ancho, alto) |
+| `src/data/images.ts` | **Única** fuente de imágenes (clave → archivo de `src/assets/`, alt, ancho, alto) |
+| `src/assets/` | Las 12 fotos del sitio (hero, aulas, biblioteca, barrio, 6 retratos docentes), ~1 MB en total |
 | `src/lib/storage.ts` | **Única** capa que toca `localStorage` |
 | `src/lib/seo.ts` | `title`, meta description, canonical, Open Graph y JSON-LD |
 
 ### Imágenes
 
-Ningún componente tiene una URL escrita directamente: todo pasa por `src/data/images.ts`
-y por el componente `Img`. Para migrar a archivos locales, se copian los archivos a
-`src/assets/` y se reemplaza cada `url` en ese archivo; no hay que tocar nada más.
+Las fotos son de **Unsplash** (licencia libre, sin atribución obligatoria) y están
+incluidas en el repositorio, en `src/assets/`: el sitio no hace ningún pedido externo para
+mostrarlas. Ningún componente referencia una imagen directamente: todo pasa por
+`src/data/images.ts` y por el componente `Img`. Para cambiar una foto, se reemplaza el
+archivo (o su import) en ese único archivo. Los retratos docentes son fotos de muestra de
+personas anónimas, no representan a personas reales de una academia.
 
 ## Claves de `localStorage`
 
