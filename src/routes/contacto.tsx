@@ -38,13 +38,17 @@ export const Route = createFileRoute("/contacto")({
   component: Contacto,
 });
 
-type Errores = Partial<Record<"nombre" | "email" | "mensaje" | "acepta", string>>;
+type Errores = Partial<Record<"nombre" | "email" | "telefono" | "mensaje" | "acepta", string>>;
 
 const emailValido = (valor: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valor.trim());
 
 type ErroresLlamada = Partial<Record<"telefono" | "acepta", string>>;
 
+const MENSAJE_TELEFONO =
+  "Revisá el teléfono: usá solo números y espacios (se aceptan + y paréntesis), entre 8 y 12 dígitos.";
+
 const telefonoValido = (valor: string) => {
+  if (!/^[+()\d\s]+$/.test(valor.trim())) return false;
   const digitos = valor.replace(/\D/g, "");
   return digitos.length >= 8 && digitos.length <= 12;
 };
@@ -112,6 +116,7 @@ function Contacto() {
 
   const refNombre = useRef<HTMLInputElement>(null);
   const refEmail = useRef<HTMLInputElement>(null);
+  const refTelefono = useRef<HTMLInputElement>(null);
   const refMensaje = useRef<HTMLTextAreaElement>(null);
   const refAcepta = useRef<HTMLInputElement>(null);
   const refTelLlamada = useRef<HTMLInputElement>(null);
@@ -152,6 +157,7 @@ function Contacto() {
     if (!nombre.trim()) nuevos.nombre = "Escribí tu nombre.";
     if (!email.trim()) nuevos.email = "Escribí tu correo.";
     else if (!emailValido(email)) nuevos.email = "El correo no tiene un formato válido.";
+    if (telefono.trim() && !telefonoValido(telefono)) nuevos.telefono = MENSAJE_TELEFONO;
     if (!mensaje.trim()) nuevos.mensaje = "Contanos brevemente tu consulta.";
     if (!acepta)
       nuevos.acepta = "Tenés que aceptar los términos y la política de privacidad.";
@@ -167,6 +173,7 @@ function Contacto() {
       setConfirmacion("");
       if (nuevos.nombre) refNombre.current?.focus();
       else if (nuevos.email) refEmail.current?.focus();
+      else if (nuevos.telefono) refTelefono.current?.focus();
       else if (nuevos.mensaje) refMensaje.current?.focus();
       else refAcepta.current?.focus();
       return;
@@ -209,7 +216,7 @@ function Contacto() {
     const nuevos: ErroresLlamada = {};
     if (!telLlamada.trim()) nuevos.telefono = "Escribí un teléfono para que te llamemos.";
     else if (!telefonoValido(telLlamada))
-      nuevos.telefono = "Revisá el teléfono: tiene que tener entre 8 y 12 dígitos.";
+      nuevos.telefono = MENSAJE_TELEFONO;
     if (!aceptaLlamada)
       nuevos.acepta = "Tenés que aceptar los términos y la política de privacidad.";
     setErroresLlamada(nuevos);
@@ -331,11 +338,19 @@ function Contacto() {
               </label>
               <input
                 id="telefono"
+                ref={refTelefono}
                 type="tel"
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
+                aria-invalid={Boolean(errores.telefono)}
+                aria-describedby={errores.telefono ? "error-telefono" : undefined}
                 className={campoClases}
               />
+              {errores.telefono ? (
+                <p id="error-telefono" className="mt-1 text-sm text-destructive">
+                  {errores.telefono}
+                </p>
+              ) : null}
             </div>
 
             <div>
