@@ -1,8 +1,15 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 
 import { contacto } from "@/data/contacto";
 
+const RUTAS_LEGALES = ["/aviso-legal", "/privacidad", "/terminos"];
+
 export function Footer({ onAbrirCookies }: { onAbrirCookies: () => void }) {
+  // Estando en una página legal, ir a otra la reemplaza en el historial: así "Volver"
+  // y el botón atrás del navegador regresan a la página de origen, no a la legal anterior.
+  const pathname = useRouterState({ select: (estado) => estado.location.pathname });
+  const enLegal = RUTAS_LEGALES.includes(pathname);
+
   return (
     <footer className="mt-20 border-t border-border bg-primary text-primary-foreground">
       <div className="container-page grid gap-10 py-12 md:grid-cols-3">
@@ -31,17 +38,17 @@ export function Footer({ onAbrirCookies }: { onAbrirCookies: () => void }) {
           <h2 className="text-sm font-bold text-primary-foreground">Información legal</h2>
           <ul className="mt-3 space-y-2 text-primary-foreground/80">
             <li>
-              <Link to="/aviso-legal" className="underline underline-offset-4">
+              <Link to="/aviso-legal" replace={enLegal} className="underline underline-offset-4">
                 Aviso legal
               </Link>
             </li>
             <li>
-              <Link to="/privacidad" className="underline underline-offset-4">
+              <Link to="/privacidad" replace={enLegal} className="underline underline-offset-4">
                 Privacidad
               </Link>
             </li>
             <li>
-              <Link to="/terminos" className="underline underline-offset-4">
+              <Link to="/terminos" replace={enLegal} className="underline underline-offset-4">
                 Términos
               </Link>
             </li>
