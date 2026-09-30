@@ -25,13 +25,19 @@ export type Consulta = {
   /** Respuestas opcionales de la consulta guiada. */
   etapa?: string;
   horas?: string;
+  /** Se guarda que la persona aceptó los términos y la política de privacidad al enviar. */
+  terminosAceptados?: boolean;
 };
 
 export type Llamada = {
   id: string;
   fecha: string;
   telefono: string;
+  terminosAceptados?: boolean;
 };
+
+/** Tope de registros guardados por clave: evita que `localStorage` crezca sin límite. */
+export const MAX_REGISTROS = 100;
 
 export type CookieDecision = {
   estado: "accepted" | "rejected";
@@ -70,9 +76,33 @@ const escribir = (clave: string, valor: unknown): boolean => {
   }
 };
 
+const esTexto = (valor: unknown): valor is string => typeof valor === "string";
+
+/** Descarta registros con forma inesperada (datos corruptos o editados a mano). */
+const esConsulta = (valor: unknown): valor is Consulta => {
+  if (typeof valor !== "object" || valor === null) return false;
+  const registro = valor as Record<string, unknown>;
+  return (
+    esTexto(registro["id"]) &&
+    esTexto(registro["fecha"]) &&
+    esTexto(registro["nombre"]) &&
+    esTexto(registro["email"]) &&
+    esTexto(registro["telefono"]) &&
+    esTexto(registro["cursoId"]) &&
+    esTexto(registro["cursoNombre"]) &&
+    esTexto(registro["mensaje"])
+  );
+};
+
+const esLlamada = (valor: unknown): valor is Llamada => {
+  if (typeof valor !== "object" || valor === null) return false;
+  const registro = valor as Record<string, unknown>;
+  return esTexto(registro["id"]) && esTexto(registro["fecha"]) && esTexto(registro["telefono"]);
+};
+
 export const leerConsultas = (): Consulta[] => {
-  const datos = leer<Consulta[]>(STORAGE_KEYS.consultas);
-  return Array.isArray(datos) ? datos : [];
+  const datos = leer<unknown>(STORAGE_KEYS.consultas);
+  return Array.isArray(datos) ? datos.filter(esConsulta) : [];
 };
 
 export const guardarConsultas = (consultas: Consulta[]) =>
@@ -95,7 +125,7 @@ export const agregarConsulta = (
     id: siguienteNumero(actuales),
     fecha: new Date().toISOString(),
   };
-  const consultas = [consulta, ...actuales];
+  const consultas = [consulta, ...actuales].slice(0, MAX_REGISTROS);
   const ok = guardarConsultas(consultas);
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent(CONSULTA_EVENT, { detail: consulta }));
@@ -104,8 +134,8 @@ export const agregarConsulta = (
 };
 
 export const leerLlamadas = (): Llamada[] => {
-  const datos = leer<Llamada[]>(STORAGE_KEYS.llamadas);
-  return Array.isArray(datos) ? datos : [];
+  const datos = leer<unknown>(STORAGE_KEYS.llamadas);
+  return Array.isArray(datos) ? datos.filter(esLlamada) : [];
 };
 
 export const guardarLlamadas = (llamadas: Llamada[]) =>
@@ -127,8 +157,9 @@ export const agregarLlamada = (
     id: siguienteNumeroLlamada(actuales),
     fecha: new Date().toISOString(),
     telefono,
+    terminosAceptados: true,
   };
-  const llamadas = [llamada, ...actuales];
+  const llamadas = [llamada, ...actuales].slice(0, MAX_REGISTROS);
   const ok = guardarLlamadas(llamadas);
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent(LLAMADA_EVENT, { detail: llamada }));

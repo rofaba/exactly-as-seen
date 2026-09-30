@@ -6,10 +6,12 @@ export const sampleLlamadas: Llamada[] = [
     id: "LLA-0002",
     fecha: "2026-09-27T14:12:00.000Z",
     telefono: "098765432",
+    terminosAceptados: true,
   },
   {
     id: "LLA-0001",
     fecha: "2026-09-21T18:40:00.000Z",
     telefono: "099123456",
+    terminosAceptados: true,
   },
 ];

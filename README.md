@@ -50,7 +50,8 @@ npm run build
 | `src/data/contacto.ts` | Datos de contacto y referencias de cómo llegar |
 | `src/data/images.ts` | **Única** fuente de imágenes (clave → archivo de `src/assets/`, alt, ancho, alto) |
 | `src/assets/` | Las 11 fotos del sitio (hero, aulas, biblioteca, 6 retratos docentes) y el mapa estático de Ciudad Vieja/Centro, ~1 MB en total |
-| `src/lib/storage.ts` | **Única** capa que toca `localStorage` |
+| `src/lib/storage.ts` | **Única** capa que toca `localStorage` (valida la forma de lo que lee y limita a 100 registros por clave) |
+| `src/lib/validacion.ts` | Reglas y limpieza de los campos de los formularios |
 | `src/lib/seo.ts` | `title`, meta description, canonical, Open Graph y JSON-LD |
 
 ### Imágenes
@@ -68,8 +69,8 @@ personas anónimas, no representan a personas reales de una academia.
 
 | Clave | Forma | Para qué |
 | --- | --- | --- |
-| `opositia.consultas` | `Array<{ id, fecha, nombre, email, telefono, cursoId, cursoNombre, mensaje, etapa?, horas? }>` | Consultas enviadas por el formulario. `id` con formato `OPO-0001`; `etapa` y `horas` son las respuestas opcionales de la consulta guiada |
-| `opositia.llamadas` | `Array<{ id, fecha, telefono }>` | Pedidos del contacto rápido. `id` con formato `LLA-0001` |
+| `opositia.consultas` | `Array<{ id, fecha, nombre, email, telefono, cursoId, cursoNombre, mensaje, etapa?, horas?, terminosAceptados? }>` | Consultas enviadas por el formulario. `id` con formato `OPO-0001`; `etapa` y `horas` son las respuestas opcionales de la consulta guiada |
+| `opositia.llamadas` | `Array<{ id, fecha, telefono, terminosAceptados? }>` | Pedidos del contacto rápido. `id` con formato `LLA-0001` |
 | `opositia.cookies` | `{ estado: "accepted" \| "rejected", fecha: string }` | Decisión del banner de cookies |
 | `opositia.probe` | `"1"` | Clave temporal: se escribe y se borra al instante para comprobar si el navegador permite usar `localStorage`. No queda guardada |
 
@@ -129,6 +130,13 @@ y borrar con el botón “Borrar decisión” del propio banner.
 - **Convocatorias destacadas**: los accesos directos de Inicio son por tipo de llamado y
   no reproducen convocatorias reales con fechas, para no dar información que pueda
   quedar desactualizada.
+- **Validación de los formularios** (`src/lib/validacion.ts`): el nombre exige nombre y apellido
+  con letras (2 a 80 caracteres, sin números ni símbolos); el correo, un formato real (sin
+  puntos seguidos ni guiones al borde del dominio, hasta 120 caracteres); el mensaje, al
+  menos 2 palabras y 10 letras (hasta 1000 caracteres). Antes de guardar se quitan los
+  caracteres invisibles y se colapsan los espacios. Un envío repetido en menos de 1,5 s se
+  ignora. Cada registro guarda `terminosAceptados: true`. Es validación de cliente: el
+  backend tiene que volver a validar todo antes de enviar correos.
 - **Formato del teléfono**: en los dos formularios se acepta un `+` opcional al inicio
   (código de país) y el resto solo dígitos, sin espacios, puntos ni guiones, entre 8 y 12
   dígitos. El campo muestra un ejemplo (`099555123 o +59899555123`) y una línea de ayuda.

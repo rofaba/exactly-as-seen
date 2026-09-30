@@ -21,6 +21,18 @@ import {
   type Llamada,
 } from "@/lib/storage";
 import { seo } from "@/lib/seo";
+import {
+  AYUDA_TELEFONO,
+  LIMITES,
+  limpiarLinea,
+  limpiarTexto,
+  MENSAJE_TELEFONO,
+  PLACEHOLDER_TELEFONO,
+  telefonoValido,
+  validarEmail,
+  validarMensaje,
+  validarNombre,
+} from "@/lib/validacion";
 
 type Search = { curso?: string | undefined };
 
@@ -40,19 +52,10 @@ export const Route = createFileRoute("/contacto")({
 
 type Errores = Partial<Record<"nombre" | "email" | "telefono" | "mensaje" | "acepta", string>>;
 
-const emailValido = (valor: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valor.trim());
-
 type ErroresLlamada = Partial<Record<"telefono" | "acepta", string>>;
 
-const PLACEHOLDER_TELEFONO = "099555123 o +59899555123";
-
-const AYUDA_TELEFONO =
-  "Solo números, sin espacios ni signos. Con código de país, empezá con + (ej.: +59899555123).";
-
-const MENSAJE_TELEFONO =
-  "Revisá el teléfono: solo números, con un + al inicio si incluís el código de país (entre 8 y 12 dígitos).";
-
-const telefonoValido = (valor: string) => /^\+?\d{8,12}$/.test(valor.trim());
+/** Espera mínima entre dos envíos, para que un doble clic no repita el registro. */
+const ESPERA_ENVIO_MS = 1500;
 
 const ETAPAS = [
   "Todavía no elegí un llamado",
@@ -122,6 +125,8 @@ function Contacto() {
   const refAcepta = useRef<HTMLInputElement>(null);
   const refTelLlamada = useRef<HTMLInputElement>(null);
   const refAceptaLlamada = useRef<HTMLInputElement>(null);
+  const ultimoEnvio = useRef(0);
+  const ultimaLlamada = useRef(0);
 
   useEffect(() => {
     if (!storageDisponible()) {
@@ -155,11 +160,13 @@ function Contacto() {
 
   const validar = (): Errores => {
     const nuevos: Errores = {};
-    if (!nombre.trim()) nuevos.nombre = "Escribí tu nombre.";
-    if (!email.trim()) nuevos.email = "Escribí tu correo.";
-    else if (!emailValido(email)) nuevos.email = "El correo no tiene un formato válido.";
+    const errorNombre = validarNombre(nombre);
+    if (errorNombre) nuevos.nombre = errorNombre;
+    const errorEmail = validarEmail(email);
+    if (errorEmail) nuevos.email = errorEmail;
     if (telefono.trim() && !telefonoValido(telefono)) nuevos.telefono = MENSAJE_TELEFONO;
-    if (!mensaje.trim()) nuevos.mensaje = "Contanos brevemente tu consulta.";
+    const errorMensaje = validarMensaje(mensaje);
+    if (errorMensaje) nuevos.mensaje = errorMensaje;
     if (!acepta)
       nuevos.acepta = "Tenés que aceptar los términos y la política de privacidad.";
     return nuevos;
@@ -167,6 +174,7 @@ function Contacto() {
 
   const onSubmit = (evento: React.FormEvent<HTMLFormElement>) => {
     evento.preventDefault();
+    if (Date.now() - ultimoEnvio.current < ESPERA_ENVIO_MS) return;
     const nuevos = validar();
     setErrores(nuevos);
 
@@ -180,16 +188,18 @@ function Contacto() {
       return;
     }
 
+    ultimoEnvio.current = Date.now();
     const elegido = getCourse(cursoId);
     const { consulta, consultas: actualizadas, ok } = agregarConsulta({
-      nombre: nombre.trim(),
+      nombre: limpiarLinea(nombre),
       email: email.trim(),
       telefono: telefono.trim(),
       cursoId: elegido?.id ?? "",
       cursoNombre: elegido?.nombre ?? "Todavía no sé",
-      mensaje: mensaje.trim(),
-      ...(etapa ? { etapa } : {}),
-      ...(horas ? { horas } : {}),
+      mensaje: limpiarTexto(mensaje),
+      ...(ETAPAS.includes(etapa) ? { etapa } : {}),
+      ...(HORAS.includes(horas) ? { horas } : {}),
+      terminosAceptados: true,
     });
 
     setConsultas(actualizadas);
@@ -214,6 +224,7 @@ function Contacto() {
 
   const onLlamada = (evento: React.FormEvent<HTMLFormElement>) => {
     evento.preventDefault();
+    if (Date.now() - ultimaLlamada.current < ESPERA_ENVIO_MS) return;
     const nuevos: ErroresLlamada = {};
     if (!telLlamada.trim()) nuevos.telefono = "Escribí un teléfono para que te llamemos.";
     else if (!telefonoValido(telLlamada))
@@ -229,6 +240,7 @@ function Contacto() {
       return;
     }
 
+    ultimaLlamada.current = Date.now();
     const { llamada, llamadas: actualizadas, ok } = agregarLlamada(telLlamada.trim());
     setLlamadas(actualizadas);
     setConfirmacionLlamada(
@@ -299,6 +311,8 @@ function Contacto() {
                 id="nombre"
                 ref={refNombre}
                 type="text"
+                autoComplete="name"
+                maxLength={LIMITES.nombre}
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 aria-invalid={Boolean(errores.nombre)}
@@ -320,6 +334,8 @@ function Contacto() {
                 id="email"
                 ref={refEmail}
                 type="email"
+                autoComplete="email"
+                maxLength={LIMITES.email}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 aria-invalid={Boolean(errores.email)}
@@ -344,6 +360,7 @@ function Contacto() {
                 inputMode="tel"
                 autoComplete="tel"
                 placeholder={PLACEHOLDER_TELEFONO}
+                maxLength={LIMITES.telefono}
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
                 aria-invalid={Boolean(errores.telefono)}
@@ -432,12 +449,18 @@ function Contacto() {
                 id="mensaje"
                 ref={refMensaje}
                 rows={5}
+                maxLength={LIMITES.mensaje}
                 value={mensaje}
                 onChange={(e) => setMensaje(e.target.value)}
                 aria-invalid={Boolean(errores.mensaje)}
-                aria-describedby={errores.mensaje ? "error-mensaje" : undefined}
+                aria-describedby={
+                  errores.mensaje ? "contador-mensaje error-mensaje" : "contador-mensaje"
+                }
                 className={campoClases}
               />
+              <p id="contador-mensaje" className="mt-1 text-xs text-muted-foreground">
+                {mensaje.length} de {LIMITES.mensaje} caracteres
+              </p>
               {errores.mensaje ? (
                 <p id="error-mensaje" className="mt-1 text-sm text-destructive">
                   {errores.mensaje}
@@ -502,6 +525,7 @@ function Contacto() {
                   inputMode="tel"
                   autoComplete="tel"
                   placeholder={PLACEHOLDER_TELEFONO}
+                  maxLength={LIMITES.telefono}
                   value={telLlamada}
                   onChange={(e) => setTelLlamada(e.target.value)}
                   aria-invalid={Boolean(erroresLlamada.telefono)}
