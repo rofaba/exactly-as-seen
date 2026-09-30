@@ -40,14 +40,16 @@ bun run lint     # ESLint
 | `src/data/sampleConsultas.ts` | Las 3 consultas de ejemplo precargadas |
 | `src/data/contacto.ts` | Datos de contacto y referencias de cómo llegar |
 | `src/data/images.ts` | **Única** fuente de imágenes (clave → archivo de `src/assets/`, alt, ancho, alto) |
-| `src/assets/` | Las 12 fotos del sitio (hero, aulas, biblioteca, barrio, 6 retratos docentes), ~1 MB en total |
+| `src/assets/` | Las 11 fotos del sitio (hero, aulas, biblioteca, 6 retratos docentes) y el mapa estático de Ciudad Vieja/Centro, ~1 MB en total |
 | `src/lib/storage.ts` | **Única** capa que toca `localStorage` |
 | `src/lib/seo.ts` | `title`, meta description, canonical, Open Graph y JSON-LD |
 
 ### Imágenes
 
-Las fotos son de **Unsplash** (licencia libre, sin atribución obligatoria) y están
-incluidas en el repositorio, en `src/assets/`: el sitio no hace ningún pedido externo para
+Las fotos son de **Unsplash** (licencia libre, sin atribución obligatoria) y el mapa de
+ubicación es una imagen estática generada a partir de teselas de **OpenStreetMap** (datos
+abiertos ODbL, con la atribución visible en la imagen y en el pie del bloque). Todo está
+incluido en el repositorio, en `src/assets/`: el sitio no hace ningún pedido externo para
 mostrarlas. Ningún componente referencia una imagen directamente: todo pasa por
 `src/data/images.ts` y por el componente `Img`. Para cambiar una foto, se reemplaza el
 archivo (o su import) en ese único archivo. Los retratos docentes son fotos de muestra de
@@ -77,8 +79,8 @@ y borrar con el botón “Borrar decisión” del propio banner.
 - **Envío del formulario**: no sale ningún correo. La consulta se guarda en
   `localStorage` y se emite un `CustomEvent` `opositia:consulta-guardada` con la consulta
   en `detail`, listo para enganchar un envío real más adelante.
-- **Ubicación**: bloque estático con dirección, referencias e imagen del barrio. No hay
-  iframe ni mapa interactivo.
+- **Ubicación**: bloque estático con dirección, referencias y un mapa en imagen de Ciudad
+  Vieja y Centro con el marcador. No hay iframe ni mapa interactivo.
 - **Legales**: `/aviso-legal`, `/privacidad` y `/terminos` solo llevan encabezado y el
   aviso `[PENDIENTE: TEXTO LEGAL …]`, marcado en el DOM con `data-mock="true"`.
 - **Contenido**: cifras, cursos, precios, fechas, docentes, testimonios y datos de
@@ -98,3 +100,19 @@ y borrar con el botón “Borrar decisión” del propio banner.
   el `select` del formulario queda preseleccionado.
 - **Página activa**: los enlaces del menú llevan subrayado ámbar, peso mayor y
   `aria-current="page"`, en escritorio y en móvil.
+- **Enlaces legales del formulario**: “términos” y “política de privacidad” abren en otra
+  pestaña para no perder lo escrito. Las tres páginas legales tienen un botón “Volver”
+  (vuelve a la página anterior del sitio; si se abrieron directamente, lleva a Contacto).
+- **Ubicación**: el bloque de “Cómo llegar” usa un mapa estático de Ciudad Vieja y Centro
+  (OpenStreetMap, con atribución). La dirección es ficticia sobre una calle real
+  (Ituzaingó) y el marcador es ilustrativo, no marca un edificio concreto.
+- **Retratos docentes**: se muestran en formato cuadrado y anclados arriba, porque en
+  formato apaisado se cortaba la cabeza de algunas fotos.
+- **Contenido sobre concursos**: se contrastó con fuentes oficiales. El reparto de puntos
+  que se muestra en Inicio es el del Decreto 440/022 (Administración Central: prueba de
+  conocimientos 50, méritos 20, evaluación psicolaboral 15, entrevista 15, mínimo 70) y se
+  presenta como ejemplo, no como regla general: BPS, BROU y otros organismos usan otros
+  repartos. La carrera diplomática exige título universitario de grado (mínimo cuatro
+  años).
+- **Fechas y precios de los cursos**: son ficticios pero coherentes: cada inicio cae en un
+  día en que ese curso se dicta.

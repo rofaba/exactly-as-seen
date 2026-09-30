@@ -285,15 +285,23 @@ function Contacto() {
                 />
                 <label htmlFor="acepta" className="text-sm text-foreground">
                   Acepto los{" "}
-                  <Link to="/terminos" className="text-accent-ink underline underline-offset-4">
-                    términos
+                  <Link
+                    to="/terminos"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent-ink underline underline-offset-4"
+                  >
+                    términos<span className="sr-only"> (se abre en otra pestaña)</span>
                   </Link>{" "}
                   y la{" "}
                   <Link
                     to="/privacidad"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-accent-ink underline underline-offset-4"
                   >
                     política de privacidad
+                    <span className="sr-only"> (se abre en otra pestaña)</span>
                   </Link>
                   .
                 </label>
@@ -349,7 +357,7 @@ function Contacto() {
 
           <section aria-labelledby="ubicacion" className="card-flat overflow-hidden">
             <Img
-              image={images.barrioMontevideo}
+              image={images.mapaCentro}
               className="aspect-[3/2] w-full object-cover"
               sizes="(min-width: 1024px) 40vw, 100vw"
             />
@@ -368,7 +376,7 @@ function Contacto() {
                 ))}
               </ul>
               <p className="mt-4 text-xs text-muted-foreground">
-                Bloque de ubicación estático: no hay mapa interactivo en esta versión.
+                Mapa estático · © colaboradores de OpenStreetMap. El mapa interactivo se integra en el lanzamiento.
               </p>
             </div>
           </section>

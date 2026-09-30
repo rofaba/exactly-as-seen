@@ -26,7 +26,7 @@ export const teachers: Teacher[] = [
   {
     nombre: "Martín Cabrera",
     cargo: "Docente de razonamiento cuantitativo",
-    formacion: "Contador público, Facultad de Ciencias Económicas (Udelar)",
+    formacion: "Contador público, Facultad de Ciencias Económicas y de Administración (Udelar)",
     anios: 11,
     especialidad: "Matemática financiera y lógica aplicada a pruebas escritas",
     trayectoria:
@@ -37,7 +37,7 @@ export const teachers: Teacher[] = [
   {
     nombre: "Lucía Methol",
     cargo: "Docente de comprensión lectora y redacción",
-    formacion: "Licenciada en Letras, Facultad de Humanidades (Udelar)",
+    formacion: "Licenciada en Letras, Facultad de Humanidades y Ciencias de la Educación (Udelar)",
     anios: 9,
     especialidad: "Redacción de informes y respuestas de desarrollo",
     trayectoria:
@@ -70,7 +70,7 @@ export const teachers: Teacher[] = [
   {
     nombre: "Diego Pintos",
     cargo: "Docente de relaciones internacionales",
-    formacion: "Magíster en Relaciones Internacionales, Udelar",
+    formacion: "Magíster en Estudios Internacionales, Udelar",
     anios: 10,
     especialidad: "Derecho internacional público e historia diplomática",
     trayectoria:

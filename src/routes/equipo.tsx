@@ -109,7 +109,7 @@ function Equipo() {
             <li key={docente.nombre} className="card-flat overflow-hidden">
               <Img
                 image={teacherImage(docente)}
-                className="aspect-[4/3] w-full object-cover"
+                className="aspect-square w-full object-cover object-[50%_8%]"
                 sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"
               />
               <div className="p-5">

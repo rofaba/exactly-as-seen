@@ -64,7 +64,7 @@ const pasos = [
     numero: "03",
     titulo: "Méritos y entrevista",
     detalle:
-      "Armado de la carpeta de antecedentes según la grilla del llamado y ensayo de entrevista con tribunal, grabado.",
+      "Armado de la carpeta de antecedentes según el esquema de valoración del llamado y ensayo de entrevista con tribunal, grabado.",
   },
 ];
 
@@ -158,30 +158,45 @@ function Inicio() {
               Cómo funciona un concurso público en Uruguay
             </h2>
             <p className="mt-4 text-muted-foreground">
-              Los llamados de organismos como BPS, BROU, UTE, ANTEL, OSE y de las
-              intendencias se publican habitualmente a través del portal oficial{" "}
+              Los llamados de la Administración Central y de organismos como BPS, BROU,
+              UTE, ANTEL y OSE se publican a través del portal oficial{" "}
               <strong className="text-primary">Uruguay Concursa</strong>, de la Oficina
               Nacional del Servicio Civil (ONSC). Ahí aparecen las bases, los plazos de
-              inscripción y los resultados de cada etapa.
+              inscripción y los resultados de cada etapa. Las intendencias suelen publicar
+              además en su propio sitio, como hace la de Montevideo.
             </p>
             <p className="mt-4 text-muted-foreground">
-              Un concurso típico combina tres etapas con puntajes distintos:
+              Las etapas más comunes son la prueba de conocimientos, los méritos y
+              antecedentes, la evaluación psicolaboral y la entrevista con el tribunal;
+              cada llamado elige cuáles usa, y algunos suman un sorteo previo entre los
+              inscriptos. Como ejemplo, así reparte los puntos el Decreto 440/022 en los
+              concursos de oposición y méritos de la Administración Central:
             </p>
             <dl className="mt-6 divide-y divide-border rule-top">
               <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-4">
-                <dt className="font-mono text-sm font-bold text-accent-ink">60 pts</dt>
+                <dt className="font-mono text-sm font-bold text-accent-ink">50 pts</dt>
                 <dd className="text-sm text-muted-foreground">
-                  <span className="font-semibold text-primary">Prueba escrita.</span>{" "}
-                  Suele exigir un mínimo del 60 % para aprobar y seguir en el proceso.
+                  <span className="font-semibold text-primary">Prueba de conocimientos.</span>{" "}
+                  Es eliminatoria: hay que superar el 60 % del puntaje para pasar a las
+                  demás etapas.
                 </dd>
               </div>
               <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-4">
-                <dt className="font-mono text-sm font-bold text-accent-ink">25 pts</dt>
+                <dt className="font-mono text-sm font-bold text-accent-ink">20 pts</dt>
                 <dd className="text-sm text-muted-foreground">
                   <span className="font-semibold text-primary">
                     Méritos y antecedentes.
                   </span>{" "}
-                  Formación, experiencia y certificaciones, según la grilla del llamado.
+                  Formación, experiencia y certificaciones, según el esquema de
+                  valoración del llamado.
+                </dd>
+              </div>
+              <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-4">
+                <dt className="font-mono text-sm font-bold text-accent-ink">15 pts</dt>
+                <dd className="text-sm text-muted-foreground">
+                  <span className="font-semibold text-primary">Evaluación psicolaboral.</span>{" "}
+                  Explora las competencias de cada postulante en relación con el perfil
+                  del puesto.
                 </dd>
               </div>
               <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-4">
@@ -193,6 +208,9 @@ function Inicio() {
               </div>
             </dl>
             <p className="mt-4 text-xs text-muted-foreground">
+              Para aprobar hay que sumar como mínimo 70 puntos. Otros organismos usan otros
+              repartos: en el llamado del BPS para auxiliares administrativos de 2026 hubo
+              prueba de conocimientos y evaluación psicolaboral, sin méritos ni entrevista.
               Cada llamado fija sus propias bases: los puntajes, los mínimos y las etapas
               pueden variar. Hay que leerlas siempre antes de inscribirse.
             </p>

@@ -1,6 +1,6 @@
 /**
  * Única fuente de imágenes del sitio. Los archivos viven en `src/assets/`
- * (fotos de Unsplash, licencia libre) y se importan acá; ningún componente
+ * (fotos de Unsplash y un mapa de OpenStreetMap, ambos de licencia libre) y se importan acá; ningún componente
  * referencia una imagen directamente.
  */
 import heroAula from "@/assets/heroAula.jpg";
@@ -8,7 +8,7 @@ import metodoEstudio from "@/assets/metodoEstudio.jpg";
 import biblioteca from "@/assets/biblioteca.jpg";
 import simulacro from "@/assets/simulacro.jpg";
 import institucional from "@/assets/institucional.jpg";
-import barrioMontevideo from "@/assets/barrioMontevideo.jpg";
+import mapaCentro from "@/assets/mapaCentro.jpg";
 import docente1 from "@/assets/docente1.jpg";
 import docente2 from "@/assets/docente2.jpg";
 import docente3 from "@/assets/docente3.jpg";
@@ -54,11 +54,11 @@ export const images = {
     width: 1200,
     height: 800,
   },
-  barrioMontevideo: {
-    url: barrioMontevideo,
-    alt: "Monumento ecuestre en la Plaza Zabala, Ciudad Vieja, Montevideo, contra el cielo azul",
-    width: 1200,
-    height: 800,
+  mapaCentro: {
+    url: mapaCentro,
+    alt: "Mapa de Ciudad Vieja y Centro de Montevideo con un marcador en Ituzaingó, junto a la Plaza Matriz",
+    width: 720,
+    height: 480,
   },
   docente1: {
     url: docente1,

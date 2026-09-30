@@ -49,12 +49,13 @@ export const courses: Course[] = [
     dirigidoA:
       "Aspirantes a llamados administrativos y de atención al público del BPS y del BROU.",
     temario: [
-      "Matemática financiera básica: interés, descuentos y cuotas",
+      "Habilidades numéricas: porcentajes, proporciones y cálculo sin calculadora",
       "Razonamiento cuantitativo y lectura de tablas y gráficos",
       "Nociones introductorias de seguridad social uruguaya",
       "Sistema financiero uruguayo: actores y funciones a nivel introductorio",
       "Resolución de consignas tipo múltiple opción",
       "Cuatro simulacros cronometrados con corrección individual",
+      "Orientación sobre la evaluación psicolaboral que sigue a la prueba",
     ],
     semanas: 10,
     cargaSemanal: "4 horas de clase + 1 simulacro cada quince días",
@@ -62,7 +63,7 @@ export const courses: Course[] = [
     dias: "Lunes y miércoles",
     franja: "18:30 a 20:30",
     grupo: "Hasta 16 personas",
-    proximoInicio: "3 de noviembre de 2026",
+    proximoInicio: "4 de noviembre de 2026",
     precio: "$U 6.400 por mes",
   },
   {
@@ -74,7 +75,7 @@ export const courses: Course[] = [
       "Personas interesadas en llamados de intendencias y municipios, con o sin experiencia previa en el Estado.",
     temario: [
       "Organización departamental y municipal en Uruguay",
-      "Congreso de Intendentes: rol y competencias",
+      "Congreso de Intendentes: rol y funcionamiento",
       "Régimen del funcionario municipal y carrera administrativa",
       "Presupuesto departamental y tasas: nociones generales",
       "Casos prácticos de llamados de Montevideo y del interior",
@@ -95,14 +96,15 @@ export const courses: Course[] = [
     resumen:
       "Programa extenso y exigente para el concurso de ingreso al servicio exterior, con pruebas escritas y orales.",
     dirigidoA:
-      "Egresados y estudiantes avanzados de grado que aspiran al concurso de ingreso a la carrera diplomática.",
+      "Personas con título universitario de grado (de al menos cuatro años) que aspiran al concurso de ingreso a la carrera diplomática.",
     temario: [
       "Historia uruguaya y contemporánea de las relaciones internacionales",
       "Derecho internacional público: fuentes, tratados y organismos",
       "Economía internacional y comercio exterior",
       "Política exterior uruguaya y regional",
-      "Preparación de la prueba escrita de desarrollo",
-      "Entrenamiento oral e idiomas: inglés y francés a nivel de lectura",
+      "Preparación de la prueba de múltiple opción y de la prueba escrita de desarrollo",
+      "Prueba de idioma inglés y entrenamiento para la prueba oral",
+      "Orientación sobre la prueba psicotécnica",
     ],
     semanas: 24,
     cargaSemanal: "6 horas de clase + 3 de lectura pautada",
@@ -110,7 +112,7 @@ export const courses: Course[] = [
     dias: "Lunes, miércoles y sábados",
     franja: "18:30 a 21:00 y sábados de 10:00 a 12:00",
     grupo: "Hasta 14 personas",
-    proximoInicio: "9 de marzo de 2027",
+    proximoInicio: "5 de octubre de 2026",
     precio: "$U 8.900 por mes",
   },
   {
@@ -121,7 +123,7 @@ export const courses: Course[] = [
     dirigidoA:
       "Quienes ya aprobaron o están rindiendo la prueba escrita y tienen que presentar méritos y entrevista.",
     temario: [
-      "Lectura de la grilla de valoración de méritos del llamado",
+      "Lectura del esquema de valoración de méritos del llamado",
       "Cómo documentar formación, experiencia y certificaciones",
       "Armado del currículum en el formato que piden las bases",
       "Simulacro de entrevista con tribunal, grabado",
@@ -140,7 +142,7 @@ export const courses: Course[] = [
     id: "razonamiento",
     nombre: "Razonamiento lógico-matemático intensivo",
     resumen:
-      "Curso corto de sábados para la parte cuantitativa, la que más puntos deja en el camino.",
+      "Curso corto de sábados para reforzar la parte cuantitativa de las pruebas en poco tiempo.",
     dirigidoA:
       "Personas que rinden cualquier llamado y necesitan reforzar cálculo y lógica en poco tiempo.",
     temario: [
@@ -157,7 +159,7 @@ export const courses: Course[] = [
     dias: "Sábados",
     franja: "9:30 a 12:30",
     grupo: "Hasta 20 personas",
-    proximoInicio: "7 de febrero de 2027",
+    proximoInicio: "6 de febrero de 2027",
     precio: "$U 4.800 (pago único)",
   },
 ];
