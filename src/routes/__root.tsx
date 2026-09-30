@@ -85,6 +85,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+// Cada "<" del JSON-LD se reemplaza por su escape Unicode de seis caracteres, para que un valor
+// con </script> no pueda cerrar la etiqueta. La barra invertida se arma por código a propósito.
+const MENOR_ESCAPADO = String.fromCharCode(92) + "u003c";
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="es-UY">
@@ -93,7 +97,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizacionJsonLd).replace(/</g, "<"),
+            __html: JSON.stringify(organizacionJsonLd).replace(/</g, MENOR_ESCAPADO),
           }}
         />
       </head>
