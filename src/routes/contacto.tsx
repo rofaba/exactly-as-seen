@@ -281,7 +281,7 @@ function Contacto() {
                   onChange={(e) => setAcepta(e.target.checked)}
                   aria-invalid={Boolean(errores.acepta)}
                   aria-describedby={errores.acepta ? "error-acepta" : undefined}
-                  className="mt-1 h-4 w-4 shrink-0 accent-[oklch(0.646_0.155_58)]"
+                  className="mt-1 h-4 w-4 shrink-0 accent-[#d97706]"
                 />
                 <label htmlFor="acepta" className="text-sm text-foreground">
                   Acepto los{" "}

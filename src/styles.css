@@ -6,7 +6,8 @@
 /*
  * Academia Opositia — sistema de diseño.
  * Identidad fija: navy, slate-soft, charcoal, amber.
- * Todos los colores en oklch. Nunca escribir colores sueltos en componentes.
+ * Los cuatro colores del briefing van en hexadecimal exacto; el resto de los tonos
+ * deriva de ellos. Nunca escribir colores sueltos en componentes.
  */
 
 @theme inline {
@@ -45,30 +46,31 @@
 :root {
   --radius: 0.25rem;
 
-  /* #F4F6F9 */
-  --background: oklch(0.972 0.005 255);
-  /* #2D3748 */
-  --foreground: oklch(0.353 0.031 261);
+  /* pizarra suave del briefing */
+  --background: #f4f6f9;
+  /* gris carbón del briefing */
+  --foreground: #2d3748;
   --surface: oklch(0.99 0.002 255);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.353 0.031 261);
-  /* #1E3A5F */
-  --primary: oklch(0.335 0.058 255);
+  --card-foreground: #2d3748;
+  /* azul marino del briefing */
+  --primary: #1e3a5f;
   --primary-foreground: oklch(0.985 0.002 255);
-  --primary-soft: oklch(0.335 0.058 255 / 8%);
+  --primary-soft: rgb(30 58 95 / 8%);
   --secondary: oklch(0.94 0.008 255);
-  --secondary-foreground: oklch(0.335 0.058 255);
+  --secondary-foreground: #1e3a5f;
   --muted: oklch(0.95 0.006 255);
   --muted-foreground: oklch(0.52 0.025 261);
-  /* #D97706 */
-  --accent: oklch(0.646 0.155 58);
+  /* ámbar apagado del briefing */
+  --accent: #d97706;
   --accent-foreground: oklch(1 0 0);
-  --accent-ink: oklch(0.49 0.12 58);
+  /* ámbar oscuro para texto chico: 5,4:1 sobre el fondo pizarra */
+  --accent-ink: #9a5200;
   --destructive: oklch(0.52 0.19 27);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.335 0.058 255 / 12%);
-  --border-strong: oklch(0.335 0.058 255 / 28%);
-  --ring: oklch(0.646 0.155 58);
+  --border: rgb(30 58 95 / 12%);
+  --border-strong: rgb(30 58 95 / 28%);
+  --ring: #d97706;
 }
 
 @layer base {
@@ -144,6 +146,8 @@
 @utility btn-accent {
   background-color: var(--color-accent);
   color: var(--color-accent-foreground);
+  font-size: 1.1875rem;
+  font-weight: 700;
   &:hover {
     background-color: var(--color-accent-ink);
   }
@@ -162,7 +166,7 @@
   background-color: var(--color-primary);
   color: var(--color-primary-foreground);
   &:hover {
-    background-color: oklch(0.28 0.055 255);
+    background-color: color-mix(in srgb, var(--color-primary) 82%, black);
   }
 }
 

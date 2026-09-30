@@ -48,7 +48,7 @@ export function CookieBanner({
       role="dialog"
       aria-modal="false"
       aria-labelledby="cookies-titulo"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-border-strong bg-card shadow-[0_-8px_24px_-20px_oklch(0.335_0.058_255/40%)]"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-border-strong bg-card shadow-[0_-8px_24px_-20px_rgb(30_58_95/40%)]"
     >
       <div className="container-page grid gap-4 py-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
         <div className="min-w-0">

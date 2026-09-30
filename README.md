@@ -13,6 +13,14 @@ bun run build    # build de producción
 bun run lint     # ESLint
 ```
 
+Sin bun también funciona con npm (verificado con Node 22 y npm 10):
+
+```bash
+npm install
+npm run dev      # http://localhost:8080
+npm run build
+```
+
 ## Stack
 
 - React 19 + TypeScript + Vite
@@ -91,7 +99,7 @@ y borrar con el botón “Borrar decisión” del propio banner.
 - **Enrutador**: el proyecto usa TanStack Router en lugar de React Router. Es lo que fija
   la plantilla; el resultado es el mismo (una URL por sección, sin hash).
 - **Tokens de color**: Tailwind v4 es CSS-first, así que navy, slate-soft, charcoal y
-  amber se definen como variables en `src/styles.css` (en `oklch`) y se exponen como
+  amber se definen como variables en `src/styles.css` (los cuatro colores del briefing, en hexadecimal exacto) y se exponen como
   `primary`, `background`, `foreground` y `accent`. No hay `tailwind.config.js`.
 - **Contraste del ámbar**: sobre fondo ámbar se usa blanco solo en botones (texto grande y
   en negrita); para texto chico se usa `accent-ink`, una variante más oscura del ámbar

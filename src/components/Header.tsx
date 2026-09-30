@@ -32,9 +32,9 @@ export function Header() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [abierto]);
 
-  const linkClases =
-    "block border-b-2 border-transparent py-2 text-[0.9375rem] font-medium text-foreground transition-colors hover:text-primary";
-  const activeClases = "border-accent font-bold text-primary";
+  const baseClases = "block border-b-2 py-2 text-[0.9375rem] transition-colors";
+  const inactiveClases = `${baseClases} border-transparent font-medium text-foreground hover:text-primary`;
+  const activeClases = `${baseClases} border-accent font-bold text-primary`;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur">
@@ -52,10 +52,10 @@ export function Header() {
                     to={item.to}
                     activeOptions={{ exact: item.to === "/" }}
                     activeProps={{
-                      className: `${linkClases} ${activeClases}`,
+                      className: activeClases,
                       "aria-current": "page",
                     }}
-                    inactiveProps={{ className: linkClases }}
+                    inactiveProps={{ className: inactiveClases }}
                   >
                     {item.label}
                   </Link>
@@ -99,11 +99,12 @@ export function Header() {
                   onClick={() => setAbierto(false)}
                   activeProps={{
                     className:
-                      "flex items-center justify-between py-3 font-bold text-primary",
+                      "flex items-center justify-between border-l-4 border-accent py-3 pl-3 font-bold text-primary",
                     "aria-current": "page",
                   }}
                   inactiveProps={{
-                    className: "flex items-center justify-between py-3 text-foreground",
+                    className:
+                      "flex items-center justify-between border-l-4 border-transparent py-3 pl-3 text-foreground",
                   }}
                 >
                   {item.label}
