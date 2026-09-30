@@ -583,11 +583,14 @@ function Contacto() {
       <section aria-labelledby="guardadas" className="mt-16 rule-top pt-10">
         <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
           <div className="min-w-0">
-            <h2 id="guardadas" className="text-xl font-bold">
+            <p className="eyebrow">Panel de demostración</p>
+            <h2 id="guardadas" className="mt-3 text-xl font-bold">
               Consultas guardadas en este navegador
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Se guardan solo en este dispositivo, en la clave{" "}
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              Este panel existe solo para la demo: permite comprobar que el formulario y el
+              contacto rápido guardan datos, y desaparece cuando se conecte el backend. Se
+              guardan solo en este dispositivo, en la clave{" "}
               <code className="font-mono text-xs">{STORAGE_KEYS.consultas}</code>.
             </p>
           </div>

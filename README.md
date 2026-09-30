@@ -81,7 +81,9 @@ almacenamiento, la página de contacto muestra un aviso visible y sigue funciona
 La primera vez que se abre `/contacto` se precargan 3 consultas de ejemplo
 (`OPO-0001` a `OPO-0003`) y 2 pedidos de llamada (`LLA-0001` y `LLA-0002`). El botón
 **“Reiniciar datos de ejemplo”**, en el panel “Consultas guardadas en este navegador”,
-vuelve ambos al estado inicial.
+vuelve ambos al estado inicial. Ese panel es solo de demostración, para poder
+comprobar el guardado sin abrir las herramientas del navegador: hay que retirarlo al
+integrar el backend real.
 
 La decisión de cookies se puede reabrir desde **“Preferencias de cookies”** en el footer,
 y borrar con el botón “Borrar decisión” del propio banner.
