@@ -92,7 +92,9 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizacionJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizacionJsonLd).replace(/</g, "<"),
+          }}
         />
       </head>
       <body>

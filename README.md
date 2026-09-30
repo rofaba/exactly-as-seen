@@ -104,6 +104,30 @@ y borrar con el botón “Borrar decisión” del propio banner.
 - **Contenido**: cifras, cursos, precios, fechas, docentes, testimonios y datos de
   contacto son ficticios y coherentes entre sí.
 
+## Notas de seguridad para el despliegue
+
+Este sitio es una demo sin backend. Lo siguiente queda para quien lo integre:
+
+- **Cabeceras HTTP**: el build solo emite `cache-control`. En el hosting de producción hay
+  que configurar `Content-Security-Policy` (el hidratado y el JSON-LD usan scripts en
+  línea, así que hace falta `'unsafe-inline'` o un `nonce`), `Strict-Transport-Security`,
+  `X-Content-Type-Options: nosniff`, `Referrer-Policy` y `frame-ancestors`. No aplicar
+  `frame-ancestors` en la vista previa de Lovable, que carga el sitio en un iframe.
+- **Claves y secretos**: `.env*` y los archivos de claves están en el `.gitignore`. Las
+  claves del servicio de correo van solo en variables de entorno del servidor, nunca con
+  prefijo `VITE_`, porque quedarían en el código que descarga el navegador.
+- **Validación**: la de `src/lib/validacion.ts` es solo de cliente. El backend tiene que
+  volver a validar y limitar todo antes de enviar correos, y no guardar datos personales
+  en el navegador.
+- **Panel de demostración y telemetría**: retirar el panel de consultas guardadas de
+  Contacto y `src/lib/lovable-error-reporting.ts` (ganchos que solo funcionan dentro del
+  editor de Lovable).
+- **Código de plantilla**: `src/components/ui/` y la mayoría de las dependencias de
+  `package.json` no se usan; conviene eliminarlas para reducir la cadena de suministro.
+  Instalar siempre con el lockfile (`bun install --frozen-lockfile`).
+- **JSON-LD**: `src/routes/__root.tsx` escapa `<` al inyectarlo; mantener ese escape si
+  los datos pasan a venir de una base de datos.
+
 ## Decisiones tomadas
 
 - **Enrutador**: el proyecto usa TanStack Router en lugar de React Router. Es lo que fija
