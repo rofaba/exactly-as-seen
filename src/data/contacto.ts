@@ -4,7 +4,7 @@ export const contacto = {
   barrio: "Ciudad Vieja, Montevideo",
   cp: "11000",
   telefono: "(+598) 1234 5678",
-  celular: "099 218 640",
+  celular: "099 123 456",
   email: "contacto@opositia.example",
   horario: "Lunes a viernes de 10:00 a 20:00 · Sábados de 9:30 a 13:00",
   canalPreferido: "Formulario de contacto (respondemos dentro de las 48 horas hábiles)",
