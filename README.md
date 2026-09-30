@@ -39,13 +39,14 @@ npm run build
 | `src/routes/index.tsx` | Inicio (`/`) |
 | `src/routes/cursos.tsx` | Catálogo con filtro por modalidad (`/cursos`) |
 | `src/routes/equipo.tsx` | Quiénes somos, valores y plantel (`/equipo`) |
-| `src/routes/contacto.tsx` | Formulario, atención comercial, ubicación y consultas guardadas (`/contacto`) |
+| `src/routes/contacto.tsx` | Formulario guiado, contacto rápido, atención comercial, ubicación y datos guardados (`/contacto`) |
 | `src/routes/aviso-legal.tsx`, `privacidad.tsx`, `terminos.tsx` | Páginas legales con el aviso de texto pendiente |
 | `src/components/` | `Header`, `Footer`, `CookieBanner`, `Img`, `LegalPage` |
 | `src/data/courses.ts` | Los 6 cursos con temario, horarios, inicio y precio |
 | `src/data/teachers.ts` | Los 6 docentes ficticios |
 | `src/data/testimonials.ts` | Los 3 testimonios ficticios |
 | `src/data/sampleConsultas.ts` | Las 3 consultas de ejemplo precargadas |
+| `src/data/sampleLlamadas.ts` | Los 2 pedidos de llamada de ejemplo precargados |
 | `src/data/contacto.ts` | Datos de contacto y referencias de cómo llegar |
 | `src/data/images.ts` | **Única** fuente de imágenes (clave → archivo de `src/assets/`, alt, ancho, alto) |
 | `src/assets/` | Las 11 fotos del sitio (hero, aulas, biblioteca, 6 retratos docentes) y el mapa estático de Ciudad Vieja/Centro, ~1 MB en total |
@@ -67,8 +68,10 @@ personas anónimas, no representan a personas reales de una academia.
 
 | Clave | Forma | Para qué |
 | --- | --- | --- |
-| `opositia.consultas` | `Array<{ id, fecha, nombre, email, telefono, cursoId, cursoNombre, mensaje }>` | Consultas enviadas por el formulario. `id` con formato `OPO-0001` |
+| `opositia.consultas` | `Array<{ id, fecha, nombre, email, telefono, cursoId, cursoNombre, mensaje, etapa?, horas? }>` | Consultas enviadas por el formulario. `id` con formato `OPO-0001`; `etapa` y `horas` son las respuestas opcionales de la consulta guiada |
+| `opositia.llamadas` | `Array<{ id, fecha, telefono }>` | Pedidos del contacto rápido. `id` con formato `LLA-0001` |
 | `opositia.cookies` | `{ estado: "accepted" \| "rejected", fecha: string }` | Decisión del banner de cookies |
+| `opositia.probe` | `"1"` | Clave temporal: se escribe y se borra al instante para comprobar si el navegador permite usar `localStorage`. No queda guardada |
 
 Todo acceso pasa por `src/lib/storage.ts`, con `try/catch`. Si el navegador bloquea el
 almacenamiento, la página de contacto muestra un aviso visible y sigue funcionando.
@@ -76,8 +79,9 @@ almacenamiento, la página de contacto muestra un aviso visible y sigue funciona
 ## Datos de ejemplo y cómo reiniciarlos
 
 La primera vez que se abre `/contacto` se precargan 3 consultas de ejemplo
-(`OPO-0001` a `OPO-0003`). El botón **“Reiniciar datos de ejemplo”**, en el panel
-“Consultas guardadas en este navegador”, vuelve al estado inicial.
+(`OPO-0001` a `OPO-0003`) y 2 pedidos de llamada (`LLA-0001` y `LLA-0002`). El botón
+**“Reiniciar datos de ejemplo”**, en el panel “Consultas guardadas en este navegador”,
+vuelve ambos al estado inicial.
 
 La decisión de cookies se puede reabrir desde **“Preferencias de cookies”** en el footer,
 y borrar con el botón “Borrar decisión” del propio banner.
@@ -87,6 +91,9 @@ y borrar con el botón “Borrar decisión” del propio banner.
 - **Envío del formulario**: no sale ningún correo. La consulta se guarda en
   `localStorage` y se emite un `CustomEvent` `opositia:consulta-guardada` con la consulta
   en `detail`, listo para enganchar un envío real más adelante.
+- **Contacto rápido**: “Quiero que me llamen” no hace ninguna llamada. Guarda el
+  teléfono en `localStorage` y emite un `CustomEvent` `opositia:llamada-solicitada` con el
+  pedido en `detail`, listo para conectar un servicio real más adelante.
 - **Ubicación**: bloque estático con dirección, referencias y un mapa en imagen de Ciudad
   Vieja y Centro con el marcador. No hay iframe ni mapa interactivo.
 - **Legales**: `/aviso-legal`, `/privacidad` y `/terminos` solo llevan encabezado y el
@@ -114,6 +121,12 @@ y borrar con el botón “Borrar decisión” del propio banner.
 - **Ubicación**: el bloque de “Cómo llegar” usa un mapa estático de Ciudad Vieja y Centro
   (OpenStreetMap, con atribución). La dirección es de ejemplo, sobre una calle real
   (Ituzaingó 1488) y el marcador es ilustrativo, no identifica un edificio concreto.
+- **Consulta guiada**: además de los datos de contacto, el formulario hace dos preguntas
+  opcionales (etapa en la que está la persona y horas de estudio por semana) para que la
+  respuesta se pueda orientar, tal como promete el cierre de Inicio.
+- **Convocatorias destacadas**: los accesos directos de Inicio son por tipo de llamado y
+  no reproducen convocatorias reales con fechas, para no dar información que pueda
+  quedar desactualizada.
 - **Retratos docentes**: se muestran en formato cuadrado y anclados arriba, porque en
   formato apaisado se cortaba la cabeza de algunas fotos.
 - **Contenido sobre concursos**: se contrastó con fuentes oficiales. El reparto de puntos

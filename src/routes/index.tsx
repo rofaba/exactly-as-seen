@@ -122,13 +122,13 @@ function Inicio() {
       </section>
 
       <section aria-labelledby="atajos" className="container-page py-14 md:py-20">
-        <p className="eyebrow">Accesos directos</p>
+        <p className="eyebrow">Convocatorias destacadas</p>
         <h2 id="atajos" className="mt-3 text-2xl font-extrabold md:text-3xl">
-          Tipos de llamado más consultados
+          Los llamados que más preparamos
         </h2>
         <p className="mt-3 max-w-2xl text-muted-foreground">
-          Atajos por tipo de llamado para llegar rápido al curso que corresponde. Son
-          orientativos: no reemplazan las bases de ninguna convocatoria.
+          Accesos directos por tipo de llamado para llegar rápido al curso que
+          corresponde. Son orientativos: no reemplazan las bases de ninguna convocatoria.
         </p>
         <ul className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {atajos.map((atajo) => (

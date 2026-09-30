@@ -6,14 +6,19 @@ import { contacto } from "@/data/contacto";
 import { courses, getCourse } from "@/data/courses";
 import { images } from "@/data/images";
 import { sampleConsultas } from "@/data/sampleConsultas";
+import { sampleLlamadas } from "@/data/sampleLlamadas";
 import {
   agregarConsulta,
+  agregarLlamada,
   formatearFecha,
   guardarConsultas,
+  guardarLlamadas,
   leerConsultas,
+  leerLlamadas,
   storageDisponible,
   STORAGE_KEYS,
   type Consulta,
+  type Llamada,
 } from "@/lib/storage";
 import { seo } from "@/lib/seo";
 
@@ -37,6 +42,53 @@ type Errores = Partial<Record<"nombre" | "email" | "mensaje" | "acepta", string>
 
 const emailValido = (valor: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valor.trim());
 
+type ErroresLlamada = Partial<Record<"telefono" | "acepta", string>>;
+
+const telefonoValido = (valor: string) => {
+  const digitos = valor.replace(/\D/g, "");
+  return digitos.length >= 8 && digitos.length <= 12;
+};
+
+const ETAPAS = [
+  "Todavía no elegí un llamado",
+  "Voy a rendir mi primer concurso",
+  "Ya estoy inscripto y preparo la prueba escrita",
+  "Aprobé la prueba escrita y sigo con méritos y entrevista",
+];
+
+const HORAS = [
+  "Menos de 4 horas por semana",
+  "Entre 4 y 8 horas por semana",
+  "Más de 8 horas por semana",
+];
+
+function TerminosLabel({ htmlFor }: { htmlFor: string }) {
+  return (
+    <label htmlFor={htmlFor} className="text-sm text-foreground">
+      Acepto los{" "}
+      <Link
+        to="/terminos"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-accent-ink underline underline-offset-4"
+      >
+        términos<span className="sr-only"> (se abre en otra pestaña)</span>
+      </Link>{" "}
+      y la{" "}
+      <Link
+        to="/privacidad"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-accent-ink underline underline-offset-4"
+      >
+        política de privacidad
+        <span className="sr-only"> (se abre en otra pestaña)</span>
+      </Link>
+      .
+    </label>
+  );
+}
+
 function Contacto() {
   const { curso } = Route.useSearch();
 
@@ -44,17 +96,26 @@ function Contacto() {
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
   const [cursoId, setCursoId] = useState(getCourse(curso)?.id ?? "");
+  const [etapa, setEtapa] = useState("");
+  const [horas, setHoras] = useState("");
   const [mensaje, setMensaje] = useState("");
   const [acepta, setAcepta] = useState(false);
   const [errores, setErrores] = useState<Errores>({});
   const [confirmacion, setConfirmacion] = useState("");
   const [aviso, setAviso] = useState("");
   const [consultas, setConsultas] = useState<Consulta[]>([]);
+  const [llamadas, setLlamadas] = useState<Llamada[]>([]);
+  const [telLlamada, setTelLlamada] = useState("");
+  const [aceptaLlamada, setAceptaLlamada] = useState(false);
+  const [erroresLlamada, setErroresLlamada] = useState<ErroresLlamada>({});
+  const [confirmacionLlamada, setConfirmacionLlamada] = useState("");
 
   const refNombre = useRef<HTMLInputElement>(null);
   const refEmail = useRef<HTMLInputElement>(null);
   const refMensaje = useRef<HTMLTextAreaElement>(null);
   const refAcepta = useRef<HTMLInputElement>(null);
+  const refTelLlamada = useRef<HTMLInputElement>(null);
+  const refAceptaLlamada = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!storageDisponible()) {
@@ -62,6 +123,7 @@ function Contacto() {
         "Tu navegador no permite guardar datos en este sitio, así que las consultas no se van a conservar.",
       );
       setConsultas(sampleConsultas);
+      setLlamadas(sampleLlamadas);
       return;
     }
     const existentes = window.localStorage.getItem(STORAGE_KEYS.consultas);
@@ -70,6 +132,13 @@ function Contacto() {
       setConsultas(sampleConsultas);
     } else {
       setConsultas(leerConsultas());
+    }
+    const pedidos = window.localStorage.getItem(STORAGE_KEYS.llamadas);
+    if (pedidos === null) {
+      guardarLlamadas(sampleLlamadas);
+      setLlamadas(sampleLlamadas);
+    } else {
+      setLlamadas(leerLlamadas());
     }
   }, []);
 
@@ -111,6 +180,8 @@ function Contacto() {
       cursoId: elegido?.id ?? "",
       cursoNombre: elegido?.nombre ?? "Todavía no sé",
       mensaje: mensaje.trim(),
+      ...(etapa ? { etapa } : {}),
+      ...(horas ? { horas } : {}),
     });
 
     setConsultas(actualizadas);
@@ -127,13 +198,49 @@ function Contacto() {
     setEmail("");
     setTelefono("");
     setCursoId("");
+    setEtapa("");
+    setHoras("");
     setMensaje("");
     setAcepta(false);
+  };
+
+  const onLlamada = (evento: React.FormEvent<HTMLFormElement>) => {
+    evento.preventDefault();
+    const nuevos: ErroresLlamada = {};
+    if (!telLlamada.trim()) nuevos.telefono = "Escribí un teléfono para que te llamemos.";
+    else if (!telefonoValido(telLlamada))
+      nuevos.telefono = "Revisá el teléfono: tiene que tener entre 8 y 12 dígitos.";
+    if (!aceptaLlamada)
+      nuevos.acepta = "Tenés que aceptar los términos y la política de privacidad.";
+    setErroresLlamada(nuevos);
+
+    if (Object.keys(nuevos).length > 0) {
+      setConfirmacionLlamada("");
+      if (nuevos.telefono) refTelLlamada.current?.focus();
+      else refAceptaLlamada.current?.focus();
+      return;
+    }
+
+    const { llamada, llamadas: actualizadas, ok } = agregarLlamada(telLlamada.trim());
+    setLlamadas(actualizadas);
+    setConfirmacionLlamada(
+      `Listo, N.º ${llamada.id}. Te llamamos dentro del horario de atención (en la demo no se realiza ninguna llamada).`,
+    );
+    if (!ok) {
+      setAviso(
+        "No pudimos guardar el pedido de llamada en este navegador, pero se registró correctamente en la demo.",
+      );
+    }
+    setTelLlamada("");
+    setAceptaLlamada(false);
   };
 
   const reiniciar = () => {
     guardarConsultas(sampleConsultas);
     setConsultas(sampleConsultas);
+    guardarLlamadas(sampleLlamadas);
+    setLlamadas(sampleLlamadas);
+    setConfirmacionLlamada("");
     setConfirmacion("");
     setAviso("Volvimos a los datos de ejemplo iniciales.");
   };
@@ -250,6 +357,49 @@ function Contacto() {
               </select>
             </div>
 
+            <fieldset className="space-y-4 rounded-sm border border-border p-4">
+              <legend className="px-2 text-sm font-semibold text-primary">
+                Para orientarte mejor{" "}
+                <span className="font-normal text-muted-foreground">(opcional)</span>
+              </legend>
+              <div>
+                <label htmlFor="etapa" className="text-sm font-semibold text-primary">
+                  ¿En qué etapa estás?
+                </label>
+                <select
+                  id="etapa"
+                  value={etapa}
+                  onChange={(e) => setEtapa(e.target.value)}
+                  className={campoClases}
+                >
+                  <option value="">Prefiero no decirlo</option>
+                  {ETAPAS.map((opcion) => (
+                    <option key={opcion} value={opcion}>
+                      {opcion}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="horas" className="text-sm font-semibold text-primary">
+                  ¿Cuánto tiempo podés estudiar por semana?
+                </label>
+                <select
+                  id="horas"
+                  value={horas}
+                  onChange={(e) => setHoras(e.target.value)}
+                  className={campoClases}
+                >
+                  <option value="">Prefiero no decirlo</option>
+                  {HORAS.map((opcion) => (
+                    <option key={opcion} value={opcion}>
+                      {opcion}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </fieldset>
+
             <div>
               <label htmlFor="mensaje" className="text-sm font-semibold text-primary">
                 Mensaje
@@ -283,28 +433,7 @@ function Contacto() {
                   aria-describedby={errores.acepta ? "error-acepta" : undefined}
                   className="mt-1 h-4 w-4 shrink-0 accent-[#d97706]"
                 />
-                <label htmlFor="acepta" className="text-sm text-foreground">
-                  Acepto los{" "}
-                  <Link
-                    to="/terminos"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent-ink underline underline-offset-4"
-                  >
-                    términos<span className="sr-only"> (se abre en otra pestaña)</span>
-                  </Link>{" "}
-                  y la{" "}
-                  <Link
-                    to="/privacidad"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent-ink underline underline-offset-4"
-                  >
-                    política de privacidad
-                    <span className="sr-only"> (se abre en otra pestaña)</span>
-                  </Link>
-                  .
-                </label>
+                <TerminosLabel htmlFor="acepta" />
               </div>
               {errores.acepta ? (
                 <p id="error-acepta" className="mt-1 text-sm text-destructive">
@@ -320,6 +449,74 @@ function Contacto() {
         </section>
 
         <div className="space-y-10">
+          <section aria-labelledby="rapido" className="card-flat border-l-4 border-l-accent p-6">
+            <h2 id="rapido" className="text-xl font-bold">
+              Contacto rápido
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Dejá tu teléfono y te llamamos dentro del horario de atención. Es una
+              simulación: no se realiza ninguna llamada.
+            </p>
+
+            <div aria-live="polite" className="min-h-0">
+              {confirmacionLlamada ? (
+                <p className="mt-4 rounded-sm border-l-4 border-l-accent bg-surface px-4 py-3 text-sm font-semibold text-primary">
+                  {confirmacionLlamada}
+                </p>
+              ) : null}
+            </div>
+
+            <form onSubmit={onLlamada} noValidate className="mt-4 space-y-4">
+              <div>
+                <label htmlFor="tel-llamada" className="text-sm font-semibold text-primary">
+                  Tu teléfono
+                </label>
+                <input
+                  id="tel-llamada"
+                  ref={refTelLlamada}
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  value={telLlamada}
+                  onChange={(e) => setTelLlamada(e.target.value)}
+                  aria-invalid={Boolean(erroresLlamada.telefono)}
+                  aria-describedby={erroresLlamada.telefono ? "error-tel-llamada" : undefined}
+                  className={campoClases}
+                />
+                {erroresLlamada.telefono ? (
+                  <p id="error-tel-llamada" className="mt-1 text-sm text-destructive">
+                    {erroresLlamada.telefono}
+                  </p>
+                ) : null}
+              </div>
+
+              <div>
+                <div className="flex items-start gap-3">
+                  <input
+                    id="acepta-llamada"
+                    ref={refAceptaLlamada}
+                    type="checkbox"
+                    checked={aceptaLlamada}
+                    onChange={(e) => setAceptaLlamada(e.target.checked)}
+                    aria-invalid={Boolean(erroresLlamada.acepta)}
+                    aria-describedby={erroresLlamada.acepta ? "error-acepta-llamada" : undefined}
+                    className="mt-1 h-4 w-4 shrink-0 accent-[#d97706]"
+                  />
+                  <TerminosLabel htmlFor="acepta-llamada" />
+                </div>
+                {erroresLlamada.acepta ? (
+                  <p id="error-acepta-llamada" className="mt-1 text-sm text-destructive">
+                    {erroresLlamada.acepta}
+                  </p>
+                ) : null}
+              </div>
+
+              <button type="submit" className="btn-base btn-accent w-full">
+                Quiero que me llamen
+              </button>
+            </form>
+          </section>
+
           <section aria-labelledby="datos" className="card-flat p-6">
             <h2 id="datos" className="text-xl font-bold">
               Atención comercial
@@ -416,6 +613,11 @@ function Contacto() {
               <p className="mt-3 text-xs font-semibold text-primary">
                 {item.cursoNombre}
               </p>
+              {item.etapa || item.horas ? (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {[item.etapa, item.horas].filter(Boolean).join(" · ")}
+                </p>
+              ) : null}
               <p className="mt-2 text-sm text-muted-foreground">{item.mensaje}</p>
             </li>
           ))}
@@ -423,6 +625,28 @@ function Contacto() {
         {consultas.length === 0 ? (
           <p className="mt-6 text-sm text-muted-foreground">
             No hay consultas guardadas en este navegador.
+          </p>
+        ) : null}
+
+        <h3 className="mt-12 text-lg font-bold">Pedidos de llamada guardados</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Del contacto rápido. Se guardan en la clave{" "}
+          <code className="font-mono text-xs">{STORAGE_KEYS.llamadas}</code>.
+        </p>
+        <ul className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {llamadas.map((item) => (
+            <li key={item.id} className="card-flat flex flex-wrap items-baseline justify-between gap-2 p-4">
+              <p className="font-mono text-sm font-bold text-accent-ink">{item.id}</p>
+              <p className="text-sm text-primary">{item.telefono}</p>
+              <p className="w-full text-xs text-muted-foreground">
+                {formatearFecha(item.fecha)}
+              </p>
+            </li>
+          ))}
+        </ul>
+        {llamadas.length === 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">
+            No hay pedidos de llamada guardados en este navegador.
           </p>
         ) : null}
       </section>

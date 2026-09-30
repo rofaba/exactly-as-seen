@@ -10,6 +10,8 @@ export const sampleConsultas: Consulta[] = [
     telefono: "099 412 785",
     cursoId: "bps-brou",
     cursoNombre: "Concursos BPS y BROU: prueba escrita",
+    etapa: "Voy a rendir mi primer concurso",
+    horas: "Entre 4 y 8 horas por semana",
     mensaje:
       "Buenas. Quiero rendir el próximo llamado del BPS y hace años que no estudio matemática. ¿El curso arranca desde cero?",
   },
@@ -21,6 +23,8 @@ export const sampleConsultas: Consulta[] = [
     telefono: "",
     cursoId: "meritos",
     cursoNombre: "Currículum, méritos y entrevista",
+    etapa: "Aprobé la prueba escrita y sigo con méritos y entrevista",
+    horas: "Menos de 4 horas por semana",
     mensaje:
       "Aprobé la prueba escrita de un llamado y tengo que presentar méritos en tres semanas. ¿Llego con el curso corto?",
   },
@@ -32,6 +36,8 @@ export const sampleConsultas: Consulta[] = [
     telefono: "091 330 204",
     cursoId: "",
     cursoNombre: "Todavía no sé",
+    etapa: "Todavía no elegí un llamado",
+    horas: "Entre 4 y 8 horas por semana",
     mensaje:
       "Vivo en Las Piedras y me queda difícil viajar de noche. ¿Tienen algo online que sirva como base general?",
   },
